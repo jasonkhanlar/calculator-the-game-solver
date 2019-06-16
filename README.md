@@ -38,6 +38,7 @@ These are all the operations recognized by the solver. Some of them support mult
 * Shift: `<`, `>`, `<shift`, `shift>`
 * Mirror: `m`, `mi`, `mir`, `mirror`
 * Flip: `+/-`, `flip`
+* Hack: `[+]2`
 
 ### Not supported (yet)
 

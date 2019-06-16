@@ -29,7 +29,17 @@ Graph.prototype.get_node = function(value) {
 	return this.node_map.get(value);
 };
 
-Graph.prototype.add_node = function(node) {
+Graph.prototype.add_node = function(node, op_type) {
+	if (op_type === 'hack') {
+		if (this.node_map.has(node.value + '_hack')) {
+			throw 'Node is already in the graph.';
+		}
+		this.node_list.push(node);
+		this.node_map.set(node.value + '_hack', node);
+		map_get_or_set(this.nodes_by_moves, node.moves_left, []).push(node);
+		return;
+	}
+
 	if (this.node_map.has(node.value)) {
 		throw 'Node is already in the graph.';
 	}
@@ -62,7 +72,7 @@ function sorted(array, sort_key_fn) {
 }
 
 
-function parse_single_operation(str) {
+function parse_single_operation(str, operations) {
 	var patterns = [
 		{
 			're': /^([-+])\s*([0-9]+)$/,
@@ -211,7 +221,25 @@ function parse_single_operation(str) {
 			're': /^(\+\/-|flip)$/,
 			'name': 'flip',
 			'parse': function(match) {
-                return function(value) { return value * -1; };
+				return function(value) { return value * -1; };
+			},
+		},
+		{
+			're': /^\[([-+])\]\s*([0-9]+)$/,
+			'name': 'hack',
+			'parse': function(match, signal, number) {
+				operations.map((operation, idx) => {
+					// This operation should change only compatible operations
+					if (/^([-+])\s*([0-9]+)$/.test(operation)) {
+						let operators = {
+							'+': function(a, b) { return parseInt(a, 10) + parseInt(b, 10) },
+							'-': function(a, b) { return parseInt(a, 10) - parseInt(b, 10) },
+						};
+						let new_number = operators[signal](operation, number);
+						operations[idx] = operations[idx].replace(/[0-9]/, new_number);
+					}
+				});
+				return function(value) { return value; };
 			},
 		},
 	];
@@ -237,7 +265,7 @@ function parse_operations(str) {
 		line => line.length > 0
 	);
 	var buttons = lines.map(
-		line => parse_single_operation(line)
+		line => parse_single_operation(line, lines)
 	).filter(
 		button => button !== null
 	);
@@ -254,10 +282,12 @@ function breadth_first_search(start_node, operations) {
 			let new_value = op.exec(node.value);
 			if (!Number.isInteger(new_value)) continue;  // Only integers.
 			if (Math.abs(new_value) >= 1000000) continue;  // Too large.
-			if (!g.get_node(new_value)) {
+			if (!g.get_node(new_value) || (op.type === 'hack' && !g.get_node(new_value + '_hack'))) {
 				let new_node = new Node(new_value, node.moves_left - 1);
-				g.add_node(new_node);
+				g.add_node(new_node, op.type);
 				queue.push(new_node);
+			} else {
+				console.log('nope', new_value, op);
 			}
 			node.edges.push(new Edge(
 				new_value,
