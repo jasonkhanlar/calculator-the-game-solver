@@ -239,6 +239,24 @@ function parse_single_operation(str) {
 				*/
 			},
 		},
+		{
+			're': /^(so|sor|sort)\s*>$/i,
+			'name': 'sortinc',
+			'parse': function(match) {
+				return function(value) {
+					return parseInt(String(value).split('').sort().join(''));
+				};
+			},
+		},
+		{
+			're': /^(so|sor|sort)\s*<$/i,
+			'name': 'sortdec',
+			'parse': function(match) {
+				return function(value) {
+					return parseInt(String(value).split('').sort((a,b) => b - a).join(''));
+				};
+			},
+		},
 	];
 
 	str = str.trim();
