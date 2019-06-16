@@ -225,6 +225,20 @@ function parse_single_operation(str) {
 				};
 			},
 		},
+        // Calculator 2
+		{
+			're': /^abc$/i,
+			'name': 'abc',
+			'parse': function(match) {
+                // TO BE COMPLETED
+                /*
+                    Calculator 2 Level 19 new button 'ABC': 'It turns numbers into letters and letters into numbers.
+                    So the number 1 could be A, B, or C\! And the number 2 could be D, E, or F!
+                    So 24 4 235 5457 8 92 243 85 69506 45602, amirite?!!?'
+                    (SO SAY MY NAME TO UNLOCK THE SWORD OF NUMBERS, AMIRITE?!!?)
+                */
+			},
+		},
 	];
 
 	str = str.trim();

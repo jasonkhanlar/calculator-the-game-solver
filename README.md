@@ -47,6 +47,7 @@ These are all the operations recognized by the solver. Some of them support mult
     * What happens if there are multiple buttons like this? Will this button affect the value of other `[+] x` buttons?
 * `Store`, which can hold a value (zero-cost) and type that value (1-movement cost).
     * How does it interact with `[+] 1`? Maybe it doesn't, and they can't be used together.
+* `ABC`
 
 ELI5 How does this solver work?
 -------------------------------
