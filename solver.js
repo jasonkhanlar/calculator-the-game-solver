@@ -237,6 +237,12 @@ function parse_single_operation(str) {
 					So 24 4 235 5457 8 92 243 85 69506 45602, amirite?!!?'
 					(SO SAY MY NAME TO UNLOCK THE SWORD OF NUMBERS, AMIRITE?!!?)
 				*/
+				return function(value) {
+					// This doesn't work yet
+					return String(value).replace(/(\d)/g, function(match, digit) {
+						return ['','ABC','DEF','GHI','JKL','MNO','PQR','STU','VWX','YZ'][parseInt(digit)];
+					});
+				}
 			},
 		},
 		{
@@ -295,8 +301,11 @@ function breadth_first_search(start_node, operations) {
 		if (node.moves_left <= 0) continue;  // or break
 		for (let op of operations) {
 			let new_value = op.exec(node.value);
-			if (!Number.isInteger(new_value)) continue;  // Only integers.
-			if (Math.abs(new_value) >= 1000000) continue;  // Too large.
+			console.log('v', new_value);
+			//No longer compatible with Calculator 2
+			//if (!Number.isInteger(new_value)) continue;  // Only integers.
+			//if (Math.abs(new_value) >= 1000000) continue;  // Too large.
+			if (Number.isInteger(new_value) && Math.abs(new_value) >= 1000000) continue;
 			if (!g.get_node(new_value)) {
 				let new_node = new Node(new_value, node.moves_left - 1);
 				g.add_node(new_node);
