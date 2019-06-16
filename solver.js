@@ -263,6 +263,16 @@ function parse_single_operation(str) {
 				};
 			},
 		},
+		{
+			're': /^(?:c|cu|cut)\s*([0-9]+)$/i,
+			'name': 'cut',
+			'parse': function(match, digits) {
+				return function(value) {
+					console.log('test', digits);
+					return parseInt(String(value).replace(new RegExp(digits, 'g'), ''));
+				};
+			},
+		},
 	];
 
 	str = str.trim();

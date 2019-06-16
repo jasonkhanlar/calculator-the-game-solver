@@ -40,6 +40,7 @@ These are all the operations recognized by the solver. Some of them support mult
 * Flip: `+/-`, `flip`
 * Inv10: `inv10`
 * Sort: `sort<`, `sort>`
+* Cut: `cut2`
 
 ### Not supported (yet)
 
